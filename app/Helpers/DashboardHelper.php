@@ -308,7 +308,7 @@ if(!function_exists('getAllCallMeByCallReason'))
 {
    // function getAllCallMeByCallReason($start=null, $end=null, $id_motif)
    // public function getAllCallMeByCallReason($optionalParam = null, $id_motif)
-   function  getAllCallMeByCallReason($start=null, $end=null, $id_motif, $optionalParam = null)
+   function  getAllCallMeByCallReason($start, $end, $id_motif, $optionalParam = null)
    {
     if($start==null && $end==null)
      $allCallMe = DB::table('callme_log')->where('advisor_conclusion',$id_motif)->orderBy('call_id','desc');
@@ -323,7 +323,7 @@ if(!function_exists('getAllCallMeByCallReason'))
 if(!function_exists('getAllProductContratContract'))
 {
    // function getAllProductContratContract($start=null, $end=null,$product_type)
- function getAllProductContratContract($product_type, $start = null, $end = null)
+ function getAllProductContratContract( $start, $end, $product_type, $optionalParam = null)
    {
     if($start==null && $end==null)
      $AllContract = DB::table('quotation')->where([['quotation.status','=',5],['quotation.product_type','=',$product_type]])->orderBy('quotation.id','desc');

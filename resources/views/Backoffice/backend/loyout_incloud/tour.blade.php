@@ -33,8 +33,8 @@
 
                         </div>
                         <ul class="nav nav-tabs tabs-dark" role="tablist">
-                            <li role="presentation" class="active"><a href="#waiting" aria-controls="settingsTab" role="tab" data-toggle="tab">Liste des commandes en attente de livraison</a></li>
-                            <li role="presentation"><a href="{{route('orders.waitingdelivery.list.tour')}}">Tournée de Livraison</a></li>
+                            <li role="presentation" ><a href="{{route('orders.waitingdelivery.list')}}">Liste des commandes en attente de livraison</a></li>
+                            <li role="presentation" class="active"><a href="#tour" aria-controls="settingsTab" role="tab" data-toggle="tab">Tournée de Livraison</a></li>
                         </ul>
 
                         <div class="tab-content">
@@ -297,95 +297,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="set-to-tour" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title custom-font">Mise en livraison</h3>
-            </div>
-            <div class="modal-body">              
-                
-                    
-                      <form class="form-horizontal" method="post" action="{{ route('settodelivery.post') }}">
-                        {{csrf_field()}}
-                        
-                        <div class="form-group">
-                            <label class="control-label">Commandes</label><br>
-                            <select class="form-control" required name="tour_order[]" id="tour_order" multiple style="width: 480px;">
-                                @foreach(waitingDelivery()->get() as $key => $c)
-                                @if(!isOrderSetToDeliveryTour($c->qid))
-                                <option value="{{$c->qid}}">{{$c->number_n}}</option>
-                                @endif
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Tournée de livraison</label><br>
-                            <select class="form-control" name="tour" id="tour" required>
-                                @foreach($delivery_tour as $key=>$del_tour)
-                                @if($del_tour->delivery_tour_status!=2)
-                                <option value="{{$del_tour->id}}"><span style="font-weight: bold; color:red">{{$del_tour->title}} - {{$del_tour->tour_number}}</span> - {{date('d/m/Y H:i:s',strtotime($del_tour->tour_start_date))}}</option>
-                                @endif
-                                @endforeach
-                            </select>
-                            <span class="help-block">Nom de la tournée - N° de tournée - Date de début</span>
-                        </div>
-                        <div class="form-group">
-                          <button type="submit" class="btn btn-success">Enregistrer</button>
-                          <button type="reset" class="btn btn-danger">Annuler</button>
-                        </div>
-                      </form>       
-              </div>
-               
-            <div class="modal-footer">
-                <button class="btn btn-default btn-ef btn-ef-4 btn-ef-4c" data-dismiss="modal"><i class="fa fa-arrow-left"></i>Quitter</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="set-to-tour2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title custom-font">Mise en livraison</h3>
-            </div>
-            <div class="modal-body">              
-                
-                    
-                      <form class="form-horizontal" method="POST" action="{{ route('settodelivery.post') }}">
-                        {{csrf_field()}}
-                        
-                        <div class="form-group">
-                            <label class="control-label">Commandes</label><br>
-                            <select class="form-control" name="tour_order[]" id="tour_order2" multiple style="width: 480px;">
-                                @foreach(waitingDelivery()->get() as $key => $c)
-                                <option value="{{$c->qid}}">{{$c->number_n}}</option>
-                               
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Tournée de livraison</label><br>
-                            <select class="form-control" name="tour" id="tour">
-                                @foreach($delivery_tour as $key=>$del_tour)
-                                <option value="{{$del_tour->id}}"><span style="font-weight: bold; color:red">{{$del_tour->tour_number}}</span> - {{date('d/m/Y H:i:s',strtotime($del_tour->tour_start_date))}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                          <button type="submit" class="btn btn-success">Enregistrer</button>
-                          <button type="reset" class="btn btn-danger">Annuler</button>
-                        </div>
-                      </form>       
-              </div>
-               
-            <div class="modal-footer">
-                <button class="btn btn-default btn-ef btn-ef-4 btn-ef-4c" data-dismiss="modal"><i class="fa fa-arrow-left"></i>Quitter</button>
-            </div>
-        </div>
-    </div>
-</div>
 
         
 <script>

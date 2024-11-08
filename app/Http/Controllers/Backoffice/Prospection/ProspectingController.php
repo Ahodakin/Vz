@@ -27,21 +27,50 @@ use Illuminate\Support\Facades\Session;
 class ProspectingController extends Controller
 {
     
+    // public function ShowCreateQuotationForm()
+  	// {
+    //     $makes = make::where('isMoto',0)->get();
+    //     $makes = make::where('isMoto',0)->get();
+
+    //     $categories = autoCategories::where('enabled', 1)->get();
+    //     $zones = City::all();
+    //     $jobs = Job::where('enabled',1)->get();
+    //     $periodes = Periode::all();
+    //     $companies = autoCompany::where('enabled',1)->get();
+    //     $guarantees = autoGuarantee::where('isDeprecated',0)->get();
+    //     $optional_services = OptionnalService::where('product_type',1)->get();
+    //     $car_types = CarType::where('car_type_status',1)->get();
+  
+    //   return view('Backoffice/backend/prospection/create-devis',compact('makes','categories','zones','jobs','periodes','companies','guarantees','optional_services','car_types'));  
+  	// }
+
     public function ShowCreateQuotationForm()
   	{
-        $makes = make::where('isMoto',0)->get();
-        $makes = make::where('isMoto',0)->get();
+		$makes = DB::table('make')
+            ->where('isMoto',0)
+            ->get();
 
-        $categories = autoCategories::where('enabled', 1)->get();
-        $zones = City::all();
-        $jobs = Job::where('enabled',1)->get();
-        $periodes = Periode::all();
-        $companies = autoCompany::where('enabled',1)->get();
-        $guarantees = autoGuarantee::where('isDeprecated',0)->get();
-        $optional_services = OptionnalService::where('product_type',1)->get();
-        $car_types = CarType::where('car_type_status',1)->get();
-  
-      return view('Backoffice/backend/prospection/create-devis',compact('makes','categories','zones','jobs','periodes','companies','guarantees','optional_services','car_types'));  
+		$categories = autoCategories::where('enabled', 1)->get();
+		$zones = City::all();
+		$jobs = Job::where('enabled',1)->get();
+		$periodes = Periode::all();
+		$companies = autoCompany::where('enabled',1)->get();
+		$guarantees = autoGuarantee::where('isDeprecated',0)->get();
+		$optional_services = OptionnalService::where('product_type',1)->get();
+    $car_types = DB::table('car_type')->where('car_type_status',1)->get();
+
+		return view('Backoffice/backend/prospection/create-devis')->with([
+		'isActive'=>'prospectmanager',
+		'categories'=>$categories,
+		'makes'=> $makes,
+		'zones'=> $zones,
+    'jobs'=> $jobs,
+		'car_types'=> $car_types,
+		'guarantees'=> $guarantees,
+		'companies'=> $companies,
+		'optional_services'=> $optional_services,
+		'periodes'=> $periodes
+		]);  
   	}
 
     public function ShowCreateVoyageQuotationForm()
@@ -56,6 +85,7 @@ class ProspectingController extends Controller
         'optional_service'=>$optional_service
         ]);
     }
+
 
     public function showListQuotationPage()
     {
@@ -160,6 +190,37 @@ class ProspectingController extends Controller
       // return view('Backoffice/backend/prospection/send-notification');
     }
 
+    public function ShowListOrderWaitingDeliveryTour(){
+      // Modify this query to retrieve the required 'prospects' data.
+      $prospects = Quotation::with('user')
+      ->where('status', 'waiting_delivery')
+      ->orderBy('created_at', 'desc')
+      ->get();
+  
+  
+      // Fetch communes from the 'commune' table
+      $communes = DB::table('commune')->get();
+  
+      // Fetch delivery tour data
+      $delivery_tour = DB::table('delivery_tour')
+          ->join('users', 'users.id', 'delivery_tour.deliveryman_id')
+          ->select('delivery_tour.*', 'firstname', 'lastname')
+          ->orderBy('id', 'desc')
+          ->get();
+  
+      // Fetch delivery tour order data
+      $delivery_tour_order = DB::table('delivery_tour_order')
+          ->join('quotation', 'quotation.id', 'delivery_tour_order.order_id')
+          ->join('users', 'users.id', 'quotation.user_id')
+          ->select('delivery_tour_order.*', 'quotation.number_n', 'quotation.policy_number', 'quotation.status', 'users.firstname', 'users.lastname')
+          ->get();
+  
+      // Fetch admin users
+      $adminUsers = User::where('usertype', 99)->where('status', 1)->get();
+  
+      return view('Backoffice/backend/loyout_incloud/tour', compact('prospects', 'communes', 'adminUsers', 'delivery_tour', 'delivery_tour_order'))
+      ->with(['isActive' => 'commande']);
+    }
 
     public function ShowListOrderWaitingDeliveryPage()
     {

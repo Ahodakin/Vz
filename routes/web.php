@@ -74,6 +74,7 @@ Route::middleware(['auth'])->group(function () {
 
 
         Route::get('/admin/commandes/waitingdelivery/list', 'ShowListOrderWaitingDeliveryPage')->name('orders.waitingdelivery.list');
+        Route::get('/admin/commandes/waitingdelivery/liste', 'ShowListOrderWaitingDeliveryTour')->name('orders.waitingdelivery.list.tour');
         Route::get('/admin/list/sinistre', 'showSinistre')->name('sinistre.list');
 
         Route::get('/admin/details-sinistre/{id_sinistre}', 'detailsSinistre')->name('sinistre.details');
